@@ -21,13 +21,6 @@
        io_ao_integrals_kinetic = "None"
        touch io_ao_integrals_kinetic
  
-
-       print*, '1-e density matrix:'
-       print*, D0tu
-
-       print*, 'Eigenvalues:'
-       print*, eig_for_measure
-
        print*, 'Entanglement measurement'
        print*, s_entanglement
 
@@ -59,7 +52,60 @@
 
  END_PROVIDER
 
+ BEGIN_PROVIDER [double precision, s_two_orb_entanglement, (n_act_orb)]
+      implicit none
+      BEGIN_DOC
+      ! Entropy based entanglement measure according to "Automated
+      ! Selection of Active Spaces", Stein & Reiher, JCTC 2016, 12
+      ! 176--1771, Eq. 4
+      END_DOC
+      integer :: i,j
+
+      ! Compute two-orbital entropy
+      ! s_ij = \omega_alpha ln \omega_alpha
+      do i=1, n_act_orb
+        if (eig_for_measure(i) < 1e-10) then
+                s_entanglement(i) = 0.d0
+        else
+                s_entanglement(i) = eig_for_measure(i)*dlog(eig_for_measure(i))/dlog(2.d0)
+        end if
+      enddo
+
+
+ END_PROVIDER
+
+
  BEGIN_PROVIDER [double precision, eig_for_measure, (n_act_orb)]
+      implicit none
+      BEGIN_DOC
+      ! eigenvalues of the density matrix for the entanglement measure
+      END_DOC
+
+      integer :: i, j, info, lwork
+      double precision, allocatable :: d_for_diag(:,:), w_tab(:)
+      double precision, allocatable :: eig_desc(:)
+      allocate(eig_desc(n_act_orb))
+
+      lwork = max(1, 3*n_act_orb-1)
+      allocate(d_for_diag(n_act_orb,n_act_orb), w_tab(lwork))
+      
+      d_for_diag = D0tu
+
+      ! diagonalize the density matrix
+      call dsyev('N', 'U', n_act_orb, d_for_diag, n_act_orb, eig_for_measure, w_tab, lwork, info)
+
+      do i=0, n_act_orb-1
+       j=n_act_orb-i
+       eig_desc(i+1) = eig_for_measure(j)
+      enddo
+
+      eig_for_measure = eig_desc
+      deallocate(d_for_diag, w_tab)
+
+      deallocate(eig_desc)
+ END_PROVIDER
+
+ BEGIN_PROVIDER [double precision, twordm_for_measure, (n_act_orb)]
       implicit none
       BEGIN_DOC
       ! eigenvalues of the density matrix for the entanglement measure
