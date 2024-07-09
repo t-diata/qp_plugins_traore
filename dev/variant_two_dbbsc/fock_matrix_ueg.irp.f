@@ -27,21 +27,20 @@ END_PROVIDER
   END_DOC
 
   IF (read_ao_one_e_integrals) THEN
-     call ezfio_get_ao_one_e_ints_ao_one_e_integrals(ao_one_e_integrals)
+     call ezfio_get_ao_one_e_ints_ao_one_e_integrals(ueg_ao_one_e_integrals)
   ELSE
         !ao_one_e_integrals = ao_integrals_n_e + ao_kinetic_integrals
-        ao_one_e_integrals = ao_kinetic_integrals
-        ueg_ao_one_e_integrals = ao_one_e_integrals
+        ueg_ao_one_e_integrals = ao_kinetic_integrals
 
   ENDIF
 
   DO j = 1, ao_num
-    ao_one_e_integrals_diag(j) = ao_one_e_integrals(j,j)
-    ueg_ao_one_e_integrals_diag(j) = ao_one_e_integrals(j,j)
+    ao_one_e_integrals_diag(j) = ueg_ao_one_e_integrals(j,j)
+    ueg_ao_one_e_integrals_diag(j) = ueg_ao_one_e_integrals(j,j)
   ENDDO
 
   IF (write_ao_one_e_integrals) THEN
-       call ezfio_set_ao_one_e_ints_ao_one_e_integrals(ao_one_e_integrals)
+       call ezfio_set_ao_one_e_ints_ao_one_e_integrals(ueg_ao_one_e_integrals)
        print *,  'ueg AO one-e integrals written to disk'
   ENDIF
 
@@ -80,7 +79,7 @@ END_PROVIDER
    END_DOC
    integer                        :: i,j,n
    if (all_shells_closed) then
-     ueg_Fock_matrix_mo = Fock_matrix_mo_alpha
+     ueg_Fock_matrix_mo = ueg_Fock_matrix_mo_alpha
    else
      ! Core
      do j = 1, elec_beta_num
