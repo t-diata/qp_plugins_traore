@@ -51,9 +51,9 @@ subroutine ueg_create_guess
     if (mo_guess_type == "HCore") then
       call restore_symmetry(ao_num,mo_num,mo_coef,size(mo_coef,1),1.d-10)
       TOUCH mo_coef
-      call mo_as_eigvectors_of_mo_matrix(mo_one_e_integrals,     &
-          size(mo_one_e_integrals,1),                            &
-          size(mo_one_e_integrals,2),                            &
+      call mo_as_eigvectors_of_mo_matrix(ueg_mo_one_e_integrals,     &
+          size(ueg_mo_one_e_integrals,1),                            &
+          size(ueg_mo_one_e_integrals,2),                            &
           mo_label,1,.false.)
       call restore_symmetry(ao_num,mo_num,mo_coef,size(mo_coef,1),1.d-10)
       SOFT_TOUCH mo_coef

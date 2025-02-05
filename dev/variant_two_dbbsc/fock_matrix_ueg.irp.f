@@ -177,6 +177,16 @@ END_PROVIDER
 
 END_PROVIDER
 
+BEGIN_PROVIDER [ double precision, ueg_mo_one_e_integrals, (mo_num,mo_num) ]
+   implicit none
+   BEGIN_DOC
+   ! copy from src/hartree_fock/scf_utils
+   ! Fock matrix on the MO basis
+   END_DOC
+   call ao_to_mo(ueg_ao_one_e_integrals,size(ueg_ao_one_e_integrals,1), &
+                 ueg_mo_one_e_integrals,size(ueg_mo_one_e_integrals,1))
+END_PROVIDER
+
 BEGIN_PROVIDER [ double precision, ueg_Fock_matrix_mo_alpha, (mo_num,mo_num) ]
    implicit none
    BEGIN_DOC

@@ -111,7 +111,7 @@ END_DOC
       ueg_Fock_matrix_AO(1:ao_num,1:ao_num) = Fock_matrix_DIIS (1:ao_num,1:ao_num,index_dim_DIIS)
       ueg_Fock_matrix_AO_alpha = ueg_Fock_matrix_AO*0.5d0
       ueg_Fock_matrix_AO_beta  = ueg_Fock_matrix_AO*0.5d0
-      TOUCH Fock_matrix_AO_alpha Fock_matrix_AO_beta
+      TOUCH ueg_Fock_matrix_AO_alpha ueg_Fock_matrix_AO_beta
     endif
 
     double precision :: level_shift_save
